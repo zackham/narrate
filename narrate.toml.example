@@ -1,0 +1,15 @@
+[voices]
+dir = "~/.narrate/voices"
+default = "adrian"
+
+[output]
+format = "mp3"
+turn_gap = 0.4
+
+[engine]
+default = "chatterbox"
+device = "auto"  # auto | cpu | cuda
+
+[elevenlabs]
+api_key = ""  # or use ELEVENLABS_API_KEY env var
+voice_map = { adrian = "voice_id_here", olivia = "voice_id_here" }

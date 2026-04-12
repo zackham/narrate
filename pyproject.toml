@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "narrate-tts"
+version = "0.1.0"
+description = "Multi-speaker script to audio using local TTS"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Zack Ham" }]
+
+dependencies = [
+    "chatterbox-tts",
+    "numpy<2.0.0",
+    "soundfile",
+    "click>=8.0",
+    "pyloudnorm",
+    "httpx",
+    'tomli; python_version < "3.11"',
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-mock"]
+
+[project.urls]
+Repository = "https://github.com/zackham/narrate"
+
+[tool.setuptools.packages.find]
+include = ["narrate*"]
+
+[project.scripts]
+narrate = "narrate.cli:cli"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

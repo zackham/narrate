@@ -1,0 +1,13 @@
+.venv*/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+*.pyc
+voices/*.wav
+!voices/.gitkeep
+reports/
+.stepwise/
+dist/
+build/
+test_*.wav
+test_*.jsonl
