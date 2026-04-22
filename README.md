@@ -131,6 +131,32 @@ Chatterbox supports inline expression tags that control vocal delivery:
 
 Use them inline: `"So here's the thing. [laugh] It's obvious in hindsight."`
 
+## Pauses & Silence
+
+Insert clean silence into your script without synthesizing speech. Useful for dramatic pauses, section breaks, or pacing.
+
+### Explicit pause with `pause_seconds`
+
+Add a JSONL entry with `pause_seconds` to insert an exact duration of silence:
+
+```jsonl
+{"voice": "adrian", "text": "Let that sink in for a moment."}
+{"voice": "", "text": "", "pause_seconds": 3.0}
+{"voice": "adrian", "text": "OK. Moving on."}
+```
+
+The `pause_seconds` field works in both JSONL and ElevenLabs JSON formats. The `voice` and `text` fields can be empty strings.
+
+### Implicit silence
+
+These patterns also produce silence (using the `turn_gap` duration):
+
+- **Empty text**: `{"voice": "adrian", "text": ""}`
+- **Ellipsis**: `{"voice": "adrian", "text": "..."}`
+- **Empty voice**: `{"voice": "", "text": "anything"}`
+
+This means entries with missing or empty voices won't crash — they produce a brief pause instead.
+
 ## Engine Configuration
 
 ### Chatterbox (default, local)

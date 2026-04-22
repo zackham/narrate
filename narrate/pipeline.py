@@ -62,13 +62,27 @@ def generate_audio(
     sample_rate: int | None = None
 
     for i, turn in enumerate(turns):
+        text = turn.text.strip() if turn.text else ""
+
+        # Pause/silence turns: explicit pause_seconds, empty text, ellipsis-only, or no voice
+        # Insert clean silence instead of trying to synthesize
+        pause_dur = getattr(turn, 'pause_seconds', None)
+        if pause_dur or not text or text == "..." or not turn.voice:
+            if sample_rate is not None:
+                dur = float(pause_dur) if pause_dur else turn_gap
+                pause_samples = int(sample_rate * dur)
+                segments.append(np.zeros(pause_samples))
+            if progress_callback is not None:
+                progress_callback(1)
+            continue
+
         # Only resolve to a WAV file when the engine needs one
         if engine.needs_wav:
             voice_ref: Path | str = resolve_voice(turn.voice, voices_dir)
         else:
             voice_ref = turn.voice
 
-        chunks = chunk_text(turn.text)
+        chunks = chunk_text(text)
 
         turn_audio_parts: list[np.ndarray] = []
         for chunk in chunks:

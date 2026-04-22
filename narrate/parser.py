@@ -12,6 +12,7 @@ import click
 class Turn(NamedTuple):
     voice: str | None
     text: str
+    pause_seconds: float | None = None  # If set, insert this much silence instead of synthesizing
 
 
 def parse_script(path: Path, default_voice: str | None = None) -> list[Turn]:
@@ -40,7 +41,7 @@ def parse_script(path: Path, default_voice: str | None = None) -> list[Turn]:
                     raise click.ClickException(
                         f"inputs[{i}]: missing required field 'text'"
                     )
-                turns.append(Turn(voice=item.get("voice"), text=item["text"]))
+                turns.append(Turn(voice=item.get("voice"), text=item["text"], pause_seconds=item.get("pause_seconds")))
             return _apply_default_voice(turns, default_voice)
     except json.JSONDecodeError:
         pass
@@ -56,7 +57,7 @@ def parse_script(path: Path, default_voice: str | None = None) -> list[Turn]:
                 raise click.ClickException(
                     f"line {lineno}: missing required field 'text'"
                 )
-            jsonl_turns.append(Turn(voice=item.get("voice"), text=item["text"]))
+            jsonl_turns.append(Turn(voice=item.get("voice"), text=item["text"], pause_seconds=item.get("pause_seconds")))
         except json.JSONDecodeError:
             jsonl_ok = False
             break
